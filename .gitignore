@@ -1,1 +1,16 @@
+#python
+__pycache__
+app/__pycache__
+app/a2a/__pycache__
+app/agents/__pycache__
+app/api/__pycache__
+app/memory/__pycache__
+app/observability/__pycache__
+app/tools/__pycache__
+
+#Environment
 venv/
+.env
+
+#other
+guide.md

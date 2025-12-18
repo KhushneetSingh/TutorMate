@@ -1,29 +1,30 @@
 import os
-from openai import OpenAI
+from dotenv import load_dotenv
+from google import genai
 
-# Read API key from environment
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+load_dotenv()
 
-if not OPENAI_API_KEY:
+# ---- API KEY ----
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+
+if not GOOGLE_API_KEY:
     raise RuntimeError(
-        "OPENAI_API_KEY not set. Add it to .env or environment variables."
+        "GOOGLE_API_KEY not set. Please export it or add it to .env"
     )
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+# ---- Client ----
+client = genai.Client(api_key=GOOGLE_API_KEY)
+
+MODEL_NAME = "gemini-2.5-flash-lite"
 
 
 def generate_study_plan(prompt: str) -> str:
     """
-    Calls LLM to generate a study plan.
+    Generate a study plan using Google Gemini (official SDK).
     """
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are an expert study planner."},
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.3,
-        max_tokens=600,
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
     )
 
-    return response.choices[0].message.content
+    return response.text # type: ignore

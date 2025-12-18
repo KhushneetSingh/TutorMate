@@ -8,76 +8,56 @@ from app.ai_client import generate_study_plan
 class PlannerAgent(BaseAgent):
     """
     PlannerAgent:
-    - creates a structured study plan
-    - adapts plan based on progress
+    Converts syllabus + constraints → adaptive study plan
     """
 
-    def _execute(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        input_data example:
-        {
-          "goal": "Prepare for Mobile Forensics exam",
-          "topics": ["Android Security", "Traffic Analysis", "Evidence Extraction"],
-          "days_available": 14,
-          "daily_hours": 2
-        }
-        """
+    def __init__(self, agent_id=None):
+        super().__init__(role="study_planner", agent_id=agent_id)
 
-        goal = input_data["goal"]
-        topics = input_data["topics"]
-        days = input_data["days_available"]
-        hours = input_data["daily_hours"]
+    def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        goal = task["goal"]
+        topics = task["topics"]
+        days = task["days_available"]
+        hours = task["daily_hours"]
 
-        prompt = self._build_prompt(goal, topics, days, hours)
+        prompt = self._prompt(goal, topics, days, hours)
+        ai_plan = generate_study_plan(prompt)
 
-        plan_text = generate_study_plan(prompt)
+        schedule = self._build_schedule(topics, days, hours)
 
-        structured_plan = self._structure_plan(
-            topics=topics,
-            days=days,
-            hours=hours
-        )
-
-        self.state["current_plan"] = {
+        plan = {
             "goal": goal,
-            "plan_text": plan_text,
-            "schedule": structured_plan,
-            "created_at": datetime.utcnow().isoformat()
+            "ai_plan": ai_plan,
+            "schedule": schedule,
+            "created_at": datetime.utcnow().isoformat(),
         }
 
-        return self.state["current_plan"]
+        self.state["active_plan"] = plan
+        return plan
 
-    def _build_prompt(self, goal, topics, days, hours) -> str:
+    def _prompt(self, goal, topics, days, hours):
         return f"""
-You are an expert study planner.
+You are an expert academic planner.
 
 Goal: {goal}
 Topics: {topics}
-Total days: {days}
+Available days: {days}
 Hours per day: {hours}
 
-Create a clear, day-wise study plan with:
-- daily goals
-- revision slots
-- mock test days
+Generate a realistic day-wise study plan.
+Include revision and mock-test days.
 """
 
-    def _structure_plan(self, topics: List[str], days: int, hours: int):
-        """
-        Deterministic fallback structure
-        (important: product reliability)
-        """
+    def _build_schedule(self, topics: List[str], days: int, hours: int):
+        start = datetime.utcnow().date()
         plan = []
-        start_date = datetime.utcnow().date()
 
-        topic_index = 0
-        for day in range(days):
+        for i in range(days):
             plan.append({
-                "day": day + 1,
-                "date": str(start_date + timedelta(days=day)),
-                "topic": topics[topic_index],
-                "hours": hours
+                "day": i + 1,
+                "date": str(start + timedelta(days=i)),
+                "topic": topics[i % len(topics)],
+                "hours": hours,
             })
-            topic_index = (topic_index + 1) % len(topics)
 
         return plan
