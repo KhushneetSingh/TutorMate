@@ -3,7 +3,7 @@ from app.agents.planner_agent import PlannerAgent
 if __name__ == "__main__":
     agent = PlannerAgent()
 
-    result = agent.run({
+    plan = agent.run({
         "goal": "Prepare for Mobile Forensics exam",
         "topics": [
             "Android Security",
@@ -15,4 +15,4 @@ if __name__ == "__main__":
     })
 
     print("\n====== FINAL STUDY PLAN ======\n")
-    print(result)
+    print(plan.model_dump_json(indent=2))

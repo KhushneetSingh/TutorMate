@@ -7,6 +7,7 @@ app/api/__pycache__
 app/memory/__pycache__
 app/observability/__pycache__
 app/tools/__pycache__
+app/schemas/__pycache__
 
 #Environment
 venv/
