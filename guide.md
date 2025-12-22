@@ -46,14 +46,20 @@ Expected: `tutormate-redis` is running.
 
 ---
 
-## 3. CHECK REDIS HEALTH (OPTIONAL)
+## 3. CHECK .env in CLI 
 ```bash
-redis-cli ping
+export $(cat .env | xargs)
+```
+
+```bash
+echo $GOOGLE_API_KEY
+echo $REDIS_URL
 ```
 
 Expected:
 ```
-PONG
+sju7yd83hjbd83hdb8dh3dhw
+redis://localhost:6379/0
 ```
 
 ---
@@ -61,6 +67,9 @@ PONG
 ## 4. RUN AGENT SYSTEM (LOCAL)
 
 Agents are run locally for debugging clarity.
+```bash
+export PYTHONPATH = .
+```
 ```bash
 python run_planner.py
 ```
