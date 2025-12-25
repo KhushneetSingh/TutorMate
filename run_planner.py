@@ -4,14 +4,14 @@ if __name__ == "__main__":
     agent = PlannerAgent()
 
     plan = agent.run({
-        "goal": "Prepare for Mobile Forensics exam",
+        "goal": "Prepare for My upcoming placement drive",
         "topics": [
-            "Android Security",
-            "Traffic Analysis",
-            "Evidence Extraction"
+            "linear Data Structures",
+            "DBMS with SQL",
+            "Computer Fundamentals"
         ],
-        "days_available": 14,
-        "daily_hours": 2
+        "days_available": 20,
+        "daily_hours": 6
     })
 
     print("\n====== FINAL STUDY PLAN ======\n")
