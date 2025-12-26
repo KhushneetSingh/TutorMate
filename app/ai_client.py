@@ -34,8 +34,8 @@ def generate_study_plan(prompt: str) -> str:
         # Log the error if needed
         print(f"Error generating study plan: {e}")
         
-        # Return fallback study plan
-        return json.dumps({
+        # Return fallback study plan - prevents any sort of crashes
+        return json.dumps({     # Converts a dict to JSON
             "goal": "Prepare for Mobile Forensics exam",
             "duration_days": 14,
             "tasks": [

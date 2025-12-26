@@ -111,6 +111,10 @@ docker stop tutormate-redis
 ```bash
 docker start tutormate-redis
 ```
+**Docker logs:**
+```bash
+docker logs tutormate-redis
+```
 
 ---
 

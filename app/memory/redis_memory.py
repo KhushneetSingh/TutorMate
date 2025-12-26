@@ -2,7 +2,7 @@ import redis
 import json
 import os
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")  # Default path also set so that during development a container is not there it still works on localhost
 
 
 class RedisMemory:
