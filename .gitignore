@@ -16,3 +16,4 @@ venv/
 #other
 # guide.md
 img/
+.DS_Store
